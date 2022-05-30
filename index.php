@@ -12,16 +12,6 @@ $wampConfFileContents = fread ($fp, filesize ($wampConfFile));
 fclose ($fp);
 
 
-//on rs les versions des applis
-preg_match('|phpVersion = (.*)\n|',$wampConfFileContents,$result);
-$phpVersion = str_replace('"','',$result[1]);
-preg_match('|apacheVersion = (.*)\n|',$wampConfFileContents,$result);
-$apacheVersion = str_replace('"','',$result[1]);
-preg_match('|mysqlVersion = (.*)\n|',$wampConfFileContents,$result);
-$mysqlVersion = str_replace('"','',$result[1]);
-preg_match('|wampserverVersion = (.*)\n|',$wampConfFileContents,$result);
-$wampserverVersion = str_replace('"','',$result[1]);
-
 // repertoires  gnorer dans les projets
 $projectsListIgnore = array ('.','..');
 
@@ -138,10 +128,14 @@ $projectContents = '';
 while ($file = readdir($handle)) 
 {
 	if (is_dir($file) && !in_array($file,$projectsListIgnore)) 
-	{		
-		$projectContents .= '<li><a href="'.$file.'">'.$file.'</a></li>';
+	{
+		if($file != "assets"):
+			$projectContents .= '<li><a href="'.$file.'" target="_blank">'.$file.'</a></li>';
+		endif;
 	}
 }
+
+
 closedir($handle);
 if (!isset($projectContents))
 	$projectContents = $langues[$langue]['txtNoProjet'];
@@ -217,17 +211,37 @@ $conteudo_html = <<< EOPAGE
 									</a>
 									<ul class="dropdown-menu">
 										<li><a href="phpmyadmin/">Banco MySQL</a></li>
+										<li><a href="?phpinfo=-1" title="">Verão do PHP</a></li>
+										<li><a href="?disp=bootstrap" title="">PHP Sysinfo</a></li>
+										<li><a href="adminer" title="">Adminer</a></li>
 									</ul>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
-				<!--=== Content ===-->
-				<div class="container content-md">
-				
-				</div>
-				<!--=== End Content ===-->				
+
+				<!--=== Breadcrumbs ===-->
+				<div class="breadcrumbs margin-bottom-40">
+					<div class="container">
+				        <h1 class="color-green pull-left">Conteiner de projetos</h1>
+				        <ul class="pull-right breadcrumb">
+				            <li><a href="index.php">Home</a> <span class="divider">/</span></li>
+				            <li><a href="">Projetos</a> <span class="divider">/</span></li>
+				            <li class="active">Bem-vindo</li>
+				        </ul>
+				    </div><!--/container-->
+				</div><!--/breadcrumbs-->
+				<!--=== End Breadcrumbs ===-->
+
+				<!--=== Content Part ===-->
+				<div class="container">		
+					<div class="row-fluid page-404">
+				    	<a href="projetos" class="btn btn-u btn-large btn-block btn-u-blue">Projetos</a>
+				    	<a href="phpmyadmin" class="btn btn-u btn-large btn-block btn-u-sea">Banco de dados</a>
+				    </div><!--/row-fluid-->        
+				</div><!--/container-->		
+				<!--=== End Content Part ===-->			
 
 				<!--=== Footer ===-->
 				<div id="footer-v1" class="footer-v1 navbar navbar-fixed-bottom">
@@ -236,7 +250,7 @@ $conteudo_html = <<< EOPAGE
 							<div class="row">
 								<div class="col-md-6">
 									<p>
-										2017 &copy; WeDoSites. Todos os direitos reservados.
+										2022 &copy; WeDoSites. Todos os direitos reservados.
 										<a href="http://domingosnunes.com.br" target="blank">Domingos Nunes</a> | <a href="http://fazemos.site" target="blank">WeDoSites</a>
 									</p>
 								</div>
